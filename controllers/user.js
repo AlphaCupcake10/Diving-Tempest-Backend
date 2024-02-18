@@ -1,9 +1,14 @@
 const User = require('../models/user');
+const Leaderboard = require('../models/leaderboard');
 
 const getUser = async (req, res) => {
     try
     {
         const user = await User.findById(req._id);
+        if (!user)
+        {
+            return res.status(400).send('User not found');
+        }
         res.status(200).json(user);
     }
     catch (err)
@@ -34,6 +39,12 @@ const handleSignIn = async (req, res) => {
     {
         const username = req.body.username;
         const user = await User.findOne({username: username});
+
+        if (!user)
+        {
+            return res.status(400).send('User not found');
+        }
+
         if (user.comparePassword(req.body.password))
         {
             const token = user.generateJWT();
@@ -54,8 +65,16 @@ const handleSignIn = async (req, res) => {
 const handleDeleteUser = async (req, res) => {
     try
     {
-        const user = await User.findByIdAndDelete(req.user._id);
-        res.status(200).json(user);
+        const user = await User.findByIdAndDelete(req._id);
+        if (!user)
+        {
+            return res.status(400).send('User not found');
+        }
+        // Also delete user from leaderboard
+        const leaderboard = await Leaderboard.findOneAndDelete({username: user.username});
+        
+        res.status(200).json({message: 'User deleted'});
+
     }
     catch (err)
     {

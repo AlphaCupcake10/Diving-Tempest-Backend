@@ -14,6 +14,9 @@ app.use(express.json());
 const userRouter = require('./routes/user'); 
 app.use('/user', userRouter);
 
+const leaderboardRouter = require('./routes/leaderboard');
+app.use('/leaderboard', leaderboardRouter);
+
 
 app.listen(process.env.PORT, () => {
   console.log('Server Started');
