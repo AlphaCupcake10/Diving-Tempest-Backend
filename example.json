@@ -1,0 +1,30 @@
+{
+    "users":[
+        {
+            "username":"AlphaCupcake10",
+            "password":"password"
+        },
+        {
+            "username":"BetaCupcake10",
+            "password":"password"
+        },
+        {
+            "username":"GammaCupcake10",
+            "password":"password"
+        }
+    ],
+    "Leaderboard":[
+        {
+            "username":"AlphaCupcake10",
+            "time":100
+        },
+        {
+            "username":"BetaCupcake10",
+            "time":50
+        },
+        {
+            "username":"GammaCupcake10",
+            "time":25
+        }
+    ]
+}
