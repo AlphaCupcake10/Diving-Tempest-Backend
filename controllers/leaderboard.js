@@ -1,4 +1,5 @@
 const Leaderboard = require('../models/leaderboard');
+const User = require('../models/user');
 
 const getLeaderboard = async (req, res) => {
     try
@@ -15,22 +16,33 @@ const getLeaderboard = async (req, res) => {
 const setRecord = async (req, res) => {
     try
     {
-        const user = await Leaderboard.findOne({_id: req._id});
+        const user = await User.findById(req._id);
         if(!user)
         {
             return res.status(400).send('User not found');
         }
 
-        //check if the time is less than the previous time
-        if(req.body.time > username.time)
+        //if username exists in leaderboard
+        if(await Leaderboard.exists({username: user.username}))
         {
-            return res.status(400).send('Previous time is less than the current time');
+            const leaderboard = await Leaderboard.findOne({username: user.username});
+            if(leaderboard.time > req.body.time)
+            {
+                leaderboard.time = req.body.score;
+                await leaderboard.save();
+                res.status(200).json(leaderboard);
+            }
+            res.status(400).send('Better record already exists');
         }
-
-        //update the time
-        user.time = req.body.time;
-        const updatedTime = await user.save();
-        res.status(200).json(updatedTime);
+        else
+        {
+            const leaderboard = new Leaderboard({
+                username: user.username,
+                time: req.body.time
+            });
+            await leaderboard.save();
+            res.status(200).json(leaderboard);
+        }
     }
     catch (err)
     {
@@ -41,8 +53,18 @@ const setRecord = async (req, res) => {
 const deleteRecord = async (req, res) => {
     try
     {
-        const user = await Leaderboard.findByIdAndDelete(req._id);
-        res.status(200).json(user);
+        const user = await User.findById(req._id);
+        if(!user)
+        {
+            return res.status(400).send('User not found');
+        }
+        const deleted = await Leaderboard.deleteOne({username: user.username});
+        
+        if(deleted.deletedCount === 0)
+        {
+            return res.status(400).send('Record not found');
+        }
+        res.status(200).send('Record deleted');
     }
     catch (err)
     {

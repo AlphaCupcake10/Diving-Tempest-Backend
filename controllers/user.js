@@ -73,7 +73,7 @@ const handleDeleteUser = async (req, res) => {
         // Also delete user from leaderboard
         const leaderboard = await Leaderboard.findOneAndDelete({username: user.username});
         
-        res.status(200).json({message: 'User deleted'});
+        res.status(200).send('User deleted');
 
     }
     catch (err)
