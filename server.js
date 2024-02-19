@@ -11,6 +11,10 @@ db.once('open', () => console.log('Connected to Database'));
 
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.send('Server is running');
+});
+
 const userRouter = require('./routes/user'); 
 app.use('/user', userRouter);
 
