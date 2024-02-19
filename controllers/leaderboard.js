@@ -4,7 +4,7 @@ const User = require('../models/user');
 const getLeaderboard = async (req, res) => {
     try
     {
-        const leaderboard = await Leaderboard.find().sort({score: -1}).limit(10);
+        const leaderboard = await Leaderboard.find().sort({time: -1}).limit(req.query.limit ? parseInt(req.query.limit) : 10);
         res.status(200).json(leaderboard);
     }
     catch (err)
@@ -28,9 +28,10 @@ const setRecord = async (req, res) => {
             const leaderboard = await Leaderboard.findOne({username: user.username});
             if(leaderboard.time > req.body.time)
             {
-                leaderboard.time = req.body.score;
+                leaderboard.time = req.body.time;
                 await leaderboard.save();
                 res.status(200).json(leaderboard);
+                return;
             }
             res.status(400).send('Better record already exists');
         }
