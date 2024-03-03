@@ -3,7 +3,7 @@ const PageStats = require('../models/pageStats');
 const incrementVisits = async (req, res) => {
     try
     {
-        const pageStats = await PageStats.findOne({});
+        let pageStats = await PageStats.findOne({});
 
         if (!pageStats)
         {
