@@ -25,6 +25,9 @@ app.use('/user', userRouter);
 const leaderboardRouter = require('./routes/leaderboard');
 app.use('/leaderboard', leaderboardRouter);
 
+const pageStatsRouter = require('./routes/stats');
+app.use('/stats', pageStatsRouter);
+
 
 app.listen(process.env.PORT, () => {
   console.log('Server Started');
