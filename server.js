@@ -25,7 +25,7 @@ app.use('/user', userRouter);
 const leaderboardRouter = require('./routes/leaderboard');
 app.use('/leaderboard', leaderboardRouter);
 
-const pageStatsRouter = require('./routes/stats');
+const pageStatsRouter = require('./routes/pageStats');
 app.use('/stats', pageStatsRouter);
 
 

@@ -2,10 +2,14 @@ const mongoose = require('mongoose');
 
 const pageStatsSchema = new mongoose.Schema(
     {
-        visits:{
+        uniqueVisits:{
             type: Number,
             required: [true,"cannot be empty"],
-        }
+        },
+        dailyVisits:{
+            type: Number,
+            required: [true,"cannot be empty"],
+        },
     }
 );
 

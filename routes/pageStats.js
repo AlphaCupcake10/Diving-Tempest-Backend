@@ -3,8 +3,8 @@ const router = express.Router();
 
 const pageStatsController = require('../controllers/pageStats');
 
-router.get('/increment', pageStatsController.incrementVisits);
-
 router.get('/', pageStatsController.getPageStats);
+router.get('/incrementUniqueVisits', pageStatsController.incrementUniqueVisits);
+router.get('/incrementDailyVisits', pageStatsController.incrementDailyVisits);
 
 module.exports = router;
