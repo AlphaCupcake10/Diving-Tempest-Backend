@@ -1,6 +1,6 @@
 const PageStats = require('../models/pageStats');
 
-const incrementUniqueVisits = async () => {
+const incrementUniqueVisits = async (req, res) => {
     try
     {
         let pageStats = await PageStats.findOne({});
@@ -12,14 +12,17 @@ const incrementUniqueVisits = async () => {
 
         pageStats.uniqueVisits++;
         await pageStats.save();
+
+        res.status(200).json(pageStats);
     }
     catch (err)
     {
         console.log(err.message);
+        res.status(400).send(err.message);
     }
 }
 
-const incrementDailyVisits = async () => {
+const incrementDailyVisits = async (req, res) => {
     try
     {
         let pageStats = await PageStats.findOne({});
@@ -31,10 +34,13 @@ const incrementDailyVisits = async () => {
 
         pageStats.dailyVisits++;
         await pageStats.save();
+
+        res.status(200).json(pageStats);
     }
     catch (err)
     {
         console.log(err.message);
+        res.status(400).send(err.message);
     }
 }
 
