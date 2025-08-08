@@ -4,6 +4,15 @@ function isAuthenticated(req, res, next)
 {
     try
     {
+        const { timestamp } = decryptXToken(req.headers['x-token'] || '');
+        if (timestamp) {
+            const now = Date.now();
+            const responseTime = now - timestamp;
+            if (responseTime > 4000) {
+                return res.status(401).json({ message: "😾" });
+            }
+        }
+        
         const token = req.headers.authorization;
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         if (!decoded) {
@@ -20,3 +29,16 @@ function isAuthenticated(req, res, next)
 }
 
 module.exports = {isAuthenticated};
+
+
+function decryptXToken(xToken) {
+    // Decode base64
+    const reversedRaw = Buffer.from(xToken, 'base64').toString('utf-8');
+    // Reverse string back
+    const raw = reversedRaw.split('').reverse().join('');
+    // Extract timestamp and random
+    const [timestampStr, randomStr] = raw.split(':');
+    const timestamp = Number(timestampStr);
+    const random = Number(randomStr);
+    return { timestamp, random };
+}
