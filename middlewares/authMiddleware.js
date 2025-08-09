@@ -4,13 +4,14 @@ function isAuthenticated(req, res, next)
 {
     try
     {
+        if (!req.headers['x-token']) {
+            throw new Error("Unauthorized");
+        }
         const { timestamp } = decryptXToken(req.headers['x-token'] || '');
-        if (timestamp) {
-            const now = Date.now();
-            const responseTime = now - timestamp;
-            if (responseTime > 4000) {
-                return res.status(401).json({ message: "😾" });
-            }
+        const now = Date.now();
+        const responseTime = now - timestamp;
+        if (responseTime > 4000) {
+            return res.status(401).json({ message: "😾" });
         }
         
         const token = req.headers.authorization;
